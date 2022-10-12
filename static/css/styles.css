@@ -17,7 +17,7 @@ header {
 }
 
 body {
-    background-image: url("background.jpg");
+    background-image: url("..\images\background.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -31,12 +31,12 @@ main {
     align-items: center;
     font-size: 150%;
 }
-
+/*
 .center {
     text-align: center;
     margin: auto;
 }
-
+*/
 a, button {
     color: black;
 }
@@ -81,4 +81,32 @@ button:hover {
     background-color: rgba(202, 172, 123, 1);
     color:white;
     border-color: rgba(202, 172, 123, 1);
+}
+
+.gradient-custom-2 {
+/* fallback for old browsers */
+background: #fccb90;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #fccb90, #ff9022);
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #fccb90, #ff9022);
+}
+
+input:focus, input:active, button:focus, button:active {
+    outline: solid rgba(202, 172, 123, 1) 2px !important;
+    box-shadow: none !important;
+ }
+
+@media (min-width: 768px) {
+.gradient-form {
+height: 100vh !important;
+}
+}
+@media (min-width: 769px) {
+.gradient-custom-2 {
+border-top-right-radius: .3rem;
+border-bottom-right-radius: .3rem;
+}
 }

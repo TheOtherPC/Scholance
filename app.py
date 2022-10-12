@@ -12,8 +12,19 @@ dolphin = {"username": "dolphin", "password": "123"}
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index():
+    return render_template("index.html")
+
+@app.route('/login', methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if checkUser(username, password):
+            session['user'] = username
+            return redirect('/dashboard')
+        return "<h1>Incorrect Login</h1>"
+    return render_template("login.html")
 
 
 def checkUser(username, password):
@@ -29,18 +40,6 @@ def checkDashBoard():
     if 'user' in session and (session['user'] == user['username'] or session['user'] == team_lead['username'] or session['user'] == admin['username'] or session['user'] == dolphin['username']):
         return True
     return False
-
-
-@app.route('/login', methods=["POST", "GET"])
-def login():
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        if checkUser(username, password):
-            session['user'] = username
-            return redirect('/dashboard')
-        return "<h1>Incorrect Login</h1>"
-    return render_template("login.html")
 
 
 @app.route('/dashboard')
@@ -70,4 +69,4 @@ def signup():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=6969, debug=True)
