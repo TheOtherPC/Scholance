@@ -16,12 +16,24 @@ header {
     height: 10vh;
 }
 
-body {
-    background-image: url("..\images\background.jpg");
+.bg-main {
+    background-image: url("../images/background.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
 }
+
+.bg-main2 {
+    background-image: url("../images/background2.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.profile-main-bg {
+    background-color:rgba(202, 172, 123, 0.75);
+}
+
 
 main {
     min-height: 100%;

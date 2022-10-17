@@ -26,6 +26,9 @@ def login():
         return "<h1>Incorrect Login</h1>"
     return render_template("login.html")
 
+@app.route('/profile', methods=["POST", "GET"])
+def profile():
+    return render_template("profile.html")
 
 def checkUser(username, password):
     if (username == user['username'] and password == user['password']) or (
