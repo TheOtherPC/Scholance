@@ -69,7 +69,7 @@ def logout():
 @app.route('/signup', methods=["POST", "GET"])
 def signup():
     if request.method == "POST":
-        new_user = models.User(request.form.get("username"), request.form.get("email"), request.form.get("password"),
+        new_user = models.User(request.form.get("username"), "NULL", request.form.get("password"),
                                request.form.get("first_name"), request.form.get("last_name"), request.form.get("school")
                                , "NULL", "base_user")
         if not dynamo.query_employees(new_user.username):

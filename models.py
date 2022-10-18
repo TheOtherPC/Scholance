@@ -57,11 +57,11 @@ class Dolphin(Admin):
 
 
 class Customer:
-    def __init__(self, cid, email, username, password, project_start, project_end):
-        self.cid = cid
-        self.email = email
+    def __init__(self, username, email, password, business, project_start, project_end):
         self.username = username
+        self.email = email
         self.password = password
+        self.business = business
         self.project_start = project_start
         self.project_end = project_end
 
