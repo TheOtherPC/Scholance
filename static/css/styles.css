@@ -57,7 +57,7 @@ main {
 }
 */
 a, button {
-    color: black;
+    color: black !important;
 }
 
 header {
@@ -74,16 +74,16 @@ header {
 }
 
 .nav_links li {
-    display: inline-block;
-    padding: 0px 20px;
+    display: inline-block !important;
+    padding: 0px 20px !important;
 }
 
 .nav_links li a {
-    transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s !important;
 }
 
 .nav_links li a:hover {
-    color: rgba(202, 172, 123, 1);
+    color: rgba(202, 172, 123, 1) !important;
 }
 
 button {
@@ -91,14 +91,14 @@ button {
     background-color: white;
     border-style: double;
     border-color: black;
-    border-radius: 50px;
+    border-radius: 50px !important;
     cursor: pointer;
     transition: all 0.3s ease 0s;
 }
 
 button:hover {
     background-color: rgba(202, 172, 123, 1);
-    color:white;
+    color:white !important;
     border-color: rgba(202, 172, 123, 1);
 }
 
