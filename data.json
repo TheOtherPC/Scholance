@@ -1,0 +1,27 @@
+[
+  {
+    "username": "hi",
+    "info": {
+      "email": "hello@gmail.com",
+      "password": "bye",
+      "first_name": "John",
+      "last_name": "Doe",
+      "level": "dolphin",
+      "school": "Deep Run",
+      "team": "NULL"
+    }
+  },
+  {
+    "username": "something",
+    "info": {
+      "email": "something@gmail.com",
+      "password": "nothing",
+      "first_name": "Bob",
+      "last_name": "Ross",
+      "level": "dolphin",
+      "school": "Deep Run",
+      "team": "NULL"
+   }
+  }
+]
+

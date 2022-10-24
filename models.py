@@ -1,5 +1,9 @@
+import dynamo
+
+
 class Team:
-    def __init__(self, team_name, team_lead, team_members, customer):
+    def __init__(self, team_id, team_name, team_lead, team_members, customer):
+        self.team_id = team_id
         self.team_name = team_name
         self.team_lead = team_lead
         self.team_members = team_members
@@ -7,59 +11,57 @@ class Team:
 
 
 class User:
-    def __init__(self, uid, email, username, password, school, team):
-        self.uid = uid
+    def __init__(self, username, email, password, first_name, last_name, school, team, level):
         self.email = email
         self.username = username
         self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
         self.school = school
         self.team = team
+        self.level = level
+
+    def changePassword(self, new_password):
+        dynamo.update_employee(self.username, "password", new_password)
 
 
 class TeamLead(User):
-    def __init__(self, is_temp):
-        self.is_temp = is_temp
+    def kickTeam(self, other_user):
+        dynamo.update_employee(other_user, "team", "NULL")
 
-    def kickTeam(self, uid):
-        # kick another user off team
-        print("Filler")
-
-    def joinTeam(self, uid):
-        # join another user to team
-        print("Filler")
+    def joinTeam(self, other_user, new_team):
+        dynamo.update_employee(other_user, "team", new_team)
 
 
 class Admin(TeamLead):
-    def demoteTeamLead(self, uid):
-        # demote another user from TeamLead to User
-        print("Filler")
+    def demoteTeamLead(self, other_user):
+        dynamo.update_employee(other_user, "level", "base_user")
 
-    def upgradeUser(self, uid):
-        # upgrade another user from User to TeamLead
-        print("Filler")
+    def upgradeTeamLead(self, other_user):
+        dynamo.update_employee(other_user, "level", "team_lead")
 
-    def fireUser(self, uid):
-        # fire/delete user
-        print("Filler")
+    def fireUser(self, other_user):
+        dynamo.delete_user(other_user)
 
     def createTeam(self, team_name, team_lead, team_members, customer):
         new_team = Team(team_name, team_lead, team_members, customer)
         # creates new team with assigned values
-class Dolphin(Admin):
-    def demoteAdmin(self, uid):
-        # demote another admin to Team Lead or User
-        print("Filler")
 
-    def upgradeUser(self, uid):
-        # upgrade Team Lead  or User to Admin
-        print("Filler")
+
+class Dolphin(Admin):
+    def demoteAdmin(self, other_user, new_level):
+        dynamo.update_employee(other_user, "level", new_level)
+
+    def upgradeAdmin(self, other_user):
+        dynamo.update_employee(other_user, "level", "admin")
+
 
 class Customer:
-    def __init__(self, cid, email, username, password, project_start, project_end):
-        self.cid = cid
-        self.email = email
+    def __init__(self, username, email, password, business, project_start, project_end):
         self.username = username
+        self.email = email
         self.password = password
+        self.business = business
         self.project_start = project_start
         self.project_end = project_end
 
@@ -68,3 +70,4 @@ class Customer:
 
     def getEnd(self):
         return self.project_end
+

@@ -31,9 +31,16 @@ header {
 }
 
 .profile-main-bg {
-    background-color:rgba(202, 172, 123, 0.75);
+    background-color:rgba(202, 172, 123, 0.4);
 }
 
+.info {
+    padding: 50px;
+    background-color: rgba(202, 172, 123, 0.4);
+    color: rgba(202, 172, 123, 1);
+    font-size: 3ch;
+    text-align: center;
+}
 
 main {
     min-height: 100%;
@@ -104,6 +111,10 @@ background: -webkit-linear-gradient(to right, #fccb90, #ff9022);
 
 /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 background: linear-gradient(to right, #fccb90, #ff9022);
+}
+
+.job-post {
+    margin: 0;
 }
 
 input:focus, input:active, button:focus, button:active {

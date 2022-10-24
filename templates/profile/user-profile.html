@@ -25,11 +25,13 @@
 
     <div class="container rounded profile-main-bg">
         <div class="row">
-            <div class="col-2 mt-4" >
-                <a href="profile">Profile</a>
-            </div>
+            <ul class="col-2 mt-4" >
+                <li><a href="user">User Profile</a></li>
+                <li><a href="business">Business Profile</a></li>
+                <li><a href="password">Password</a></li>
+            </ul>
             <div class="col-10 mt-4" >
-                <h3>Edit Profile:</h3>
+                <h3 class="text-center">Edit User Profile:</h3>
                 <form>
                     
                     <div>
@@ -59,17 +61,6 @@
                         <label class="form-label" for="school_name">School</label>
                         <input type="school_name" id="school_name" class="form-control">
                     </div>
-  
-                    <div class="form-outline mb-4">
-                      <label class="form-label" for="new_password">New Password</label>
-                      <input type="new_password" id="new_password" class="form-control" />
-                    </div>
-
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="repeat_new_password">Repeat New Password</label>
-                        <input type="repeat_new_password" id="repeat_new_password" class="form-control" />
-                      </div>
-
                     <div class="text-center pt-1 pb-1">
                       <button class="fa-lg mb-3" type="update">Update</button>
                     </div>

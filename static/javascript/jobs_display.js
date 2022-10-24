@@ -1,0 +1,1 @@
+// will read all the job entries from the database and append it to the page.
