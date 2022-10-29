@@ -1,6 +1,6 @@
 import json
 
-from flask import (Flask, render_template, request, redirect, session)
+from flask import (Flask, render_template, request, redirect, session, flash)
 import random
 
 import dynamo
@@ -147,6 +147,29 @@ def signup():
             return redirect('/login')
         return "<h1>Username Taken</h1>"
     return render_template("signup.html")
+
+@app.route('/profile/user')
+def user_profile():
+    return render_template("profile/user-profile.html")
+
+@app.route('/profile/business')
+def business_profile():
+    return render_template("profile/business-profile.html")
+
+@app.route('/profile/password')
+def password():
+    return render_template("profile/password.html")
+
+@app.route("/projects")
+def projects():
+    return render_template("projects/projects.html")
+
+@app.route("/projects/post", methods=["post", "get"])
+def postjob():
+    if request.method == "post":
+        flash("project posted successfully!", "info")
+        return redirect(request.url)
+    return render_template("projects/post-project.html")
 
 
 if __name__ == '__main__':
