@@ -34,6 +34,13 @@ header {
     background-color:rgba(202, 172, 123, 0.4);
 }
 
+.info {
+    padding: 50px;
+    background-color: rgba(202, 172, 123, 0.4);
+    color: rgba(202, 172, 123, 1);
+    font-size: 3ch;
+    text-align: center;
+}
 
 main {
     min-height: 100%;
@@ -50,7 +57,7 @@ main {
 }
 */
 a, button {
-    color: black;
+    color: black !important;
 }
 
 header {
@@ -67,16 +74,16 @@ header {
 }
 
 .nav_links li {
-    display: inline-block;
-    padding: 0px 20px;
+    display: inline-block !important;
+    padding: 0px 20px !important;
 }
 
-.nav_links li a {
-    transition: all 0.3s ease 0s;
+.nav_links li a, a {
+    transition: all 0.3s ease 0s !important;
 }
 
-.nav_links li a:hover {
-    color: rgba(202, 172, 123, 1);
+.nav_links li a:hover, a:hover {
+    color: rgba(202, 172, 123, 1) !important;
 }
 
 button {
@@ -84,14 +91,14 @@ button {
     background-color: white;
     border-style: double;
     border-color: black;
-    border-radius: 50px;
+    border-radius: 50px !important;
     cursor: pointer;
     transition: all 0.3s ease 0s;
 }
 
 button:hover {
     background-color: rgba(202, 172, 123, 1);
-    color:white;
+    color:white !important;
     border-color: rgba(202, 172, 123, 1);
 }
 
@@ -99,11 +106,15 @@ button:hover {
 /* fallback for old browsers */
 background: #fccb90;
 
-/* Chrome 10-25, Safari 5.1-6 */
+/* Chrome 10-25, Safari 5.1-6 
 background: -webkit-linear-gradient(to right, #fccb90, #ff9022);
 
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #fccb90, #ff9022);
+ W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, rgba(202, 172, 123, 0.5), rgba(202, 172, 123, 1));
+}
+
+.job-post {
+    margin: 0;
 }
 
 input:focus, input:active, button:focus, button:active {
