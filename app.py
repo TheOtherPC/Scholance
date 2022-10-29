@@ -49,17 +49,6 @@ def login():
         return "<h1>Incorrect Login</h1>"'''
     return render_template("login.html")
 
-
-@app.route('/dashboard')
-def dashboard():
-    if user is None:
-        exit
-    else:
-        if 'user' in session and session['user'] == user.username:
-            return "<h1>Dashboard</h1>"
-    return "<h1>Not Logged In</h1>"
-
-
 @app.route('/logout')
 def logout():
     session.pop("user")
@@ -77,16 +66,20 @@ def business_profile():
 def password():
     return render_template("profile/password.html")
 
-@app.route("/jobs")
-def jobs():
-    return render_template("jobs/jobs.html")
+@app.route("/projects")
+def projects():
+    return render_template("projects/projects.html")
 
-@app.route("/jobs/post", methods=["POST", "GET"])
+@app.route("/projects/post", methods=["POST", "GET"])
 def postjob():
     if request.method == "POST":
-        flash("Job posted successfully!", "info")
+        flash("Project posted successfully!", "info")
         return redirect(request.url)
-    return render_template("jobs/post-job.html")
+    return render_template("projects/post-project.html")
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard/dashboard.html")
 
 
 @app.route('/signup', methods=["POST", "GET"])

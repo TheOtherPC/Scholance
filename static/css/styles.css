@@ -78,11 +78,11 @@ header {
     padding: 0px 20px !important;
 }
 
-.nav_links li a {
+.nav_links li a, a {
     transition: all 0.3s ease 0s !important;
 }
 
-.nav_links li a:hover {
+.nav_links li a:hover, a:hover {
     color: rgba(202, 172, 123, 1) !important;
 }
 
@@ -106,11 +106,11 @@ button:hover {
 /* fallback for old browsers */
 background: #fccb90;
 
-/* Chrome 10-25, Safari 5.1-6 */
+/* Chrome 10-25, Safari 5.1-6 
 background: -webkit-linear-gradient(to right, #fccb90, #ff9022);
 
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #fccb90, #ff9022);
+ W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, rgba(202, 172, 123, 0.5), rgba(202, 172, 123, 1));
 }
 
 .job-post {
