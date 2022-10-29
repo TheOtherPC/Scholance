@@ -1,0 +1,10 @@
+[
+  {
+    "team_name": "alpha",
+    "info": {
+      "team_lead": "hi",
+      "team_members": ["something","Bross"],
+      "project": null
+    }
+  }
+]

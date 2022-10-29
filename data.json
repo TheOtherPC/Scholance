@@ -5,10 +5,20 @@
       "email": "hello@gmail.com",
       "password": "bye",
       "first_name": "John",
-      "last_name": "Doe",
+      "last_name": "Doe"
+    },
+    "employee": {
       "level": "dolphin",
       "school": "Deep Run",
-      "team": "NULL"
+      "teams": ["alpha"],
+      "interests": [],
+      "skills": [],
+      "projects": []
+    },
+    "customer": {
+      "business": null,
+      "projects": [],
+      "phone_number": null
     }
   },
   {
@@ -17,11 +27,21 @@
       "email": "something@gmail.com",
       "password": "nothing",
       "first_name": "Bob",
-      "last_name": "Ross",
+      "last_name": "Ross"
+   },
+    "employee": {
       "level": "dolphin",
       "school": "Deep Run",
-      "team": "NULL"
-   }
+      "teams": ["alpha"],
+      "interests": [],
+      "skills": [],
+      "projects": []
+    },
+    "customer": {
+      "business": "some_business",
+      "projects": [],
+      "phone_number": "0123456789"
+  }
   }
 ]
 

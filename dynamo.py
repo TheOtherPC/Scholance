@@ -6,12 +6,10 @@ from boto3.dynamodb.conditions import Key
 import boto3
 
 
-# also create a new table for customers
-
-def create_employee_table(dynamodb=None):
+def create_user_table(dynamodb=None):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
     table = dynamodb.create_table(
-        TableName='Employees',
+        TableName='Users',
         KeySchema=[
             {
                 'AttributeName': 'username',
@@ -33,9 +31,59 @@ def create_employee_table(dynamodb=None):
     return table
 
 
-def load_data(user_list, dynamodb=None):
+def create_team_table(dynamodb=None):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.create_table(
+        TableName='Users',
+        KeySchema=[
+            {
+                'AttributeName': 'username',
+                'KeyType': 'HASH'  # Partition key
+            },
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'username',
+                'AttributeType': 'S'
+            },
+        ],
+        ProvisionedThroughput={
+            # ReadCapacityUnits set to 10 strongly consistent reads per second
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10  # WriteCapacityUnits set to 10 writes per second
+        }
+    )
+    return table
+
+
+def create_project_table(dynamodb=None):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
+    table = dynamodb.create_table(
+        TableName='Projects',
+        KeySchema=[
+            {
+                'AttributeName': 'project_name',
+                'KeyType': 'HASH'  # Partition key
+            },
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'project_name',
+                'AttributeType': 'S'
+            },
+        ],
+        ProvisionedThroughput={
+            # ReadCapacityUnits set to 10 strongly consistent reads per second
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10  # WriteCapacityUnits set to 10 writes per second
+        }
+    )
+    return table
+
+
+def load_user_data(user_list, dynamodb=None):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
     for user in user_list:
         username = user['username']
 
@@ -43,29 +91,85 @@ def load_data(user_list, dynamodb=None):
         table.put_item(Item=user)
 
 
-def put_employee(user):
+def load_team_data(team_list, dynamodb=None):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.Table('Teams')
+    for team in team_list:
+        team_name = team['team_name']
+
+        print("Loading Teams Data: ", team_name)
+        table.put_item(Item=team)
+
+
+def put_user(user):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
     response = table.put_item(
         Item={
-            'username': user.username,
+            'username': user['username'],
             'info': {
-                'email': user.email,
-                'password': user.password,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'level': user.level,
-                'school': user.school,
-                'team': user.team
+                'email': user['info']['email'],
+                'password': user['info']['password'],
+                'first_name': user['info']['first_name'],
+                'last_name': user['info']['last_name'],
+            },
+            'employee': {
+                'level': user['employee']['level'],
+                'school': user['employee']['school'],
+                'teams': user['employee']['teams'],
+                'interests': user['employee']['interests'],
+                'skills': user['employee']['skills'],
+                'projects': user['employee']['skills']
+            },
+            'customer': {
+                'business': user['customer']['business'],
+                'projects': user['customer']['projects'],
+                'phone_number': user['customer']['phone_number']
             }
         }
     )
     return response
 
 
-def get_employee(username, dynamodb=None):
+def put_team(team):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.Table("Teams")
+    response = table.put_item(
+        Item={
+            'team_name': team.team_name,
+            'info': {
+                'team_lead': team.team_lead,
+                'team_members': team.team_members,
+                'project': team.project
+            }
+
+        }
+    )
+    return response
+
+
+def put_project(project):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
+    table = dynamodb.Table("Projects")
+    response = table.put_item(
+        Item={
+            'project_name': project.project_name,
+            'info': {
+                'workers': project.workers,
+                'project_start': project.project_start,
+                'project_end': project.project_end,
+                'customer': project.customer.username,
+                'interests': project.interests,
+                'skills': project.skills
+            }
+        }
+    )
+    return response
+
+
+def get_user(username, dynamodb=None):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
 
     try:
         response = table.get_item(
@@ -76,9 +180,35 @@ def get_employee(username, dynamodb=None):
         return response['Item']
 
 
-def update_employee(username, attribute, attribute_value):
+def get_team(team_name, dynamodb=None):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.Table('Teams')
+
+    try:
+        response = table.get_item(
+            Key={'team_name': team_name})
+    except ClientError as er:
+        print(er.response['Error']['Message'])
+    else:
+        return response['Item']
+
+
+def get_project(project_name, dynamodb=None):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
+    table = dynamodb.Table('Teams')
+
+    try:
+        response = table.get_item(
+            Key={'project_name': project_name})
+    except ClientError as er:
+        print(er.response['Error']['Message'])
+    else:
+        return response['Item']
+
+
+def update_user(username, attribute, attribute_value):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:8000")
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
 
     response = table.update_item(
         Key={
@@ -93,39 +223,177 @@ def update_employee(username, attribute, attribute_value):
     return response
 
 
+def update_team(team_name, attribute, attribute_value):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.table('Teams')
+
+    response = table.update_tem(
+        Key={
+            'team_name': team_name,
+        },
+        UpdateExpression="set info." + attribute + "=:c",
+        ExpressionAttributeValues={
+            ":c": attribute_value
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    return response
+
+
+def update_project(project_name, attribute, attribute_value):
+    dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
+    table = dynamodb.table('Projects')
+
+    response = table.update_tem(
+        Key={
+            'project_name': project_name,
+        },
+        UpdateExpression="set info." + attribute + "=:c",
+        ExpressionAttributeValues={
+            ":c": attribute_value
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    return response
+
+
 def delete_user(username, dynamodb=None):
     dynamodb = boto3.resource(
         'dynamodb', endpoint_url="http://localhost:8000")
     # Specify the table to delete from
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
 
     response = table.delete_item(
         Key={
             'username': username,
         },
     )
+    return response
 
-def query_employees(username, dynamodb=None):
+
+def delete_team(team_name, dynamodb=None):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:9000")
+    table = dynamodb.table('Teams')
+
+    response = table.delete_item(
+        Key={
+            'team_name': team_name,
+        },
+    )
+    return response
+
+
+def delete_project(project_name):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:10000")
+    table = dynamodb.table('Projects')
+
+    response = table.delete_item(
+        Key={
+            'project_name': project_name,
+        },
+    )
+    return response
+
+
+def query_users(username, dynamodb=None):
     dynamodb = boto3.resource(
         'dynamodb', endpoint_url="http://localhost:8000")
     # Specify the table to query
-    table = dynamodb.Table('Employees')
+    table = dynamodb.Table('Users')
     response = table.query(
         KeyConditionExpression=Key('username').eq(username)
     )
     return response['Items']
 
 
+def query_teams(team_name, dynamodb=None):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:9000"
+    )
+    table = dynamodb.Table('Teams')
+    response = table.query(
+        KeyConditionExpression=Key('team_name').eq(team_name)
+    )
+    return response['Items']
+
+
+def query_projects(project_name):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:10000"
+    )
+    table = dynamodb.Table('Projects')
+    response = table.query(
+        KeyCondtionExpression=Key('project_name').eq(project_name)
+    )
+    return response['Items']
+
+
+def scan_users(attribute):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:8000")
+    table = dynamodb.Table('Users')
+    response = table.scan(ProjectionExpression="" + attribute + ", username")
+    return response['Items']
+
+
+def scan_teams(attribute):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:9000"
+    )
+    table = dynamodb.Table('Teams')
+    response = table.scan(ProjectionExpression="" + attribute + ", team_name")
+    return response['Items']
+
+
+def scan_projects(attribute):
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:10000"
+    )
+    table = dynamodb.Table('Projects')
+    response = table.scan(ProjectionExpression="" + attribute + ", project_name")
+    return response['Items']
+
+
+def get_all_users():
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:8000"
+    )
+    table = dynamodb.Table('Users')
+    response = table.scan(ProjectionExpression="username")
+    return response['Items']
+
+
+def get_all_teams():
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:9000"
+    )
+    table = dynamodb.Table('Teams')
+    response = table.scan(ProjectionExpression="team_name")
+    return response['Items']
+
+
+def get_all_projects():
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:10000"
+    )
+    table = dynamodb.Table('Projects')
+    response = table.scan(ProjectionExpression="project_name")
+    return response['Items']
+
 
 if __name__ == '__main__':
     '''
-      employees_table = create_employee_table()
-      # Print table status
-      print("Status:", employees_table.table_status)
-      '''
-
+    projects_table = create_project_table()
+    print("Stats:", projects_table.table_status)
     '''
-        with open("data.json") as json_file:
-            employees_list = json.load(json_file, parse_float=Decimal)
-        load_data(employees_list)
-        '''
+    '''
+    users_table = create_user_table()
+    print("Status:", users_table.table_status)
+    '''
+'''
+    with open("data.json") as json_file:
+        users_list = json.load(json_file, parse_float=Decimal)
+    load_user_data(users_list)
+'''
