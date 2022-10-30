@@ -104,7 +104,7 @@ class Customer(User):
 
 @dispatch(str, Team, datetime.date, datetime.date, Customer, list, list)
 class Project:
-    def __init__(self, project_name, team, project_start, project_end, customer, interests, skills):
+    def __init__(self, project_name, team, project_start, project_end, customer, interests, skills, payment, active):
         self.project_name = project_name
         self.workers = team
         self.project_start = project_start
@@ -112,11 +112,13 @@ class Project:
         self.customer = customer
         self.interests = interests
         self.skills = skills
+        self.payment = payment
+        self.active = active
 
 
 @dispatch(str, Employee, datetime.date, datetime.date, Customer, list, list)
 class Project:
-    def __init__(self, project_name, employee, project_start, project_end, customer, interests, skills):
+    def __init__(self, project_name, employee, project_start, project_end, customer, interests, skills, payment, active):
         self.project_name = project_name
         self.workers = employee
         self.project_start = project_start
@@ -124,3 +126,5 @@ class Project:
         self.customer = customer
         self.interests = interests
         self.skills = skills
+        self.payment = payment
+        self.active = active

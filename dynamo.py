@@ -160,7 +160,9 @@ def put_project(project):
                 'project_end': project.project_end,
                 'customer': project.customer.username,
                 'interests': project.interests,
-                'skills': project.skills
+                'skills': project.skills,
+                'payment': project.payment,
+                'active': project.active
             }
         }
     )
