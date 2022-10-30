@@ -34,16 +34,16 @@ def create_user_table(dynamodb=None):
 def create_team_table(dynamodb=None):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
     table = dynamodb.create_table(
-        TableName='Users',
+        TableName='Teams',
         KeySchema=[
             {
-                'AttributeName': 'username',
+                'AttributeName': 'team_name',
                 'KeyType': 'HASH'  # Partition key
             },
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'username',
+                'AttributeName': 'team_name',
                 'AttributeType': 'S'
             },
         ],
@@ -384,16 +384,4 @@ def get_all_projects():
 
 
 if __name__ == '__main__':
-    '''
-    projects_table = create_project_table()
-    print("Stats:", projects_table.table_status)
-    '''
-    '''
-    users_table = create_user_table()
-    print("Status:", users_table.table_status)
-    '''
-'''
-    with open("data.json") as json_file:
-        users_list = json.load(json_file, parse_float=Decimal)
-    load_user_data(users_list)
-'''
+    pass
