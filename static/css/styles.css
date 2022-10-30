@@ -130,6 +130,53 @@ input:focus, input:active, button:focus, button:active {
     box-shadow: none !important;
  }
 
+ p {
+    display: block;
+ }
+
+ .text-preview {
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, 
+    from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));   
+ }
+
+.c {
+	max-width: 1100px;
+	margin: 0 auto;
+	overflow: auto;
+	padding: 0 40px;
+	align-items: center;
+}
+
+.g {
+	display: grid;
+	grid-template-columns: 300px;
+    max-width: 75%;
+	height: 100%;
+}
+
+.gp {
+    background-color: rgba(202, 172, 123, 0.75);
+    border-top: 0.5ch solid rgba(202, 172, 123, 1);
+    border-bottom: 0.5ch solid rgba(202, 172, 123, 1);
+    border-left: none;
+    border-right: none;
+    padding: 5%;
+    margin: 5%;
+    width: 90%;
+    height: 90%;
+}
+
+ .cgrid-auto {
+	align-items: center;
+	justify-items: center;
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.project-title {
+    margin-top: 10%;
+    margin-bottom: 0px;
+}
+
 @media (min-width: 768px) {
 .gradient-form {
 height: 100vh !important;

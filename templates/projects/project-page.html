@@ -23,16 +23,14 @@
         </nav> 
     </header>
 
-    <section class="c g cgrid-auto">
-        {% for project in data %}
-            <div class="text-center gp">
-                <h4 class="project-title">{{ project.project_name }}</h4>
-                <h5> {{ project.info.skills }} </h5>
-                <h6>{{ project.info.project_start }} {{ project.info.payment }}</h6> <br>
-                <p class="text-preview" maxlength="30">{{ project.info.active }}</p> 
-                <a class="cta" href="/projects/{{project.info.interests}}"><button>Apply</button></a>
-            </div>
-        {% endfor %}
+    <section class="c">
+        <div class="text-center gp">
+            <h1 class="project-title">{{ project_data.project_name }}</h1>
+            <h5> {{ project_data.info.skills }} </h5>
+            <h6>{{ project_data.info.project_start }} {{ project_data.info.payment }}</h6> <br>
+            <p maxlength="30">{{ project_data.info.active }}</p> 
+            <a class="cta" href="/projects/{{project_data.info.interests}}"><button>Apply</button></a>
+        </div>
     </section>    
 </body>
 </html>

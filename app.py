@@ -3,6 +3,7 @@ from xml.dom.pulldom import SAX2DOM
 from random import randint
 from flask import (Flask, render_template, request, redirect, session, flash)
 import random
+import projects_update
 
 import dynamo
 import models
@@ -88,6 +89,7 @@ def projects_check():
     items = table.scan()['Items']
     from pprint import pprint
     pprint(items)
+    projects_update.update()
     return f"Projects: {items}"
 
 @app.route('/dashboard')
@@ -137,6 +139,7 @@ def projectPost():
                                     "TBD",  "n/a", "n/a", "n/a", "n/a", "n/a")
         dynamo.put_project(project)
         flash("Project posted successfully!", "info")
+        projects_update.update()
         return redirect(request.url)
     return render_template("projects/post-project.html")
 
@@ -177,11 +180,11 @@ def password():
 
 @app.route("/projects")
 def projects():
-    table = dynamo.get_projects_table()
-    data = table.scan()['Items']
-    from pprint import pprint
-    pprint(json.dumps(data))
-    return render_template("projects/projects.html", data=str(json.dumps(data)))
+    # table = dynamo.get_projects_table()
+    # data = table.scan()['Items']
+    with open('projectsdata.json') as f:
+        data = json.load(f)
+    return render_template("projects/projects.html", data=data, data_length=len(data))
 
 @app.route("/projects/post", methods=["post", "get"])
 def postjob():
@@ -189,6 +192,15 @@ def postjob():
         flash("project posted successfully!", "info")
         return redirect(request.url)
     return render_template("projects/post-project.html")
+
+@app.route("/projects/<project>")
+def project_page(project):
+    with open('projectsdata.json') as f:
+        data = json.load(f)
+    for project_data in data:
+        if project_data["info"]["interests"] == project:
+            return render_template("/projects/project-page.html", project_data=project_data)
+    return "<h1>Project Not Found!</h1>"
 
 
 if __name__ == '__main__':

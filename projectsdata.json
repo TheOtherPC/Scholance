@@ -1,0 +1,132 @@
+[
+  {
+    "project_name": "Fullstack Webdev Project",
+    "info": {
+      "skills": "John Apkers Inc.",
+      "project_start": "Small Project",
+      "active": "At John Apkers, you will be proceeding with a project which will require modifying the current domain's website with newer technologies. For example, you'll be required to utilize Bootstrap 5 instead of older Bootstrap 4 alternatives along with using Angular.JS in working on the project. Please be sure to comment code properly and orderly. We hope to see you apply soon to our entertainment! We'll be sure to give you a great amount of reccs in.",
+      "project_end": "June 16",
+      "payment": "- $100",
+      "interests": "fullstack-webdev-project-039258",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "Health Systems Administrator Backend",
+    "info": {
+      "skills": "BALLUS Daemon Tech Inc.",
+      "project_start": "Large Project",
+      "active": "BALLUS Daemon Tech Inc. is about the people. People we meet and care for; people whose lives we enhance, and those whose lives we save. BALLUS is about the people who work here: our award-winning medical staff, dedicated housekeeping staff, compassionate nurses and patient-focused ancillary staff. We're about people who need us, from small bumps to massive trauma, no matter their economic bracket.",
+      "project_end": "TBD",
+      "payment": "",
+      "interests": "health-systems-administrator-backend-753294",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "Systems Engineer",
+    "info": {
+      "skills": "Raidon",
+      "project_start": "Medium Project",
+      "active": "Raidon is charging into the Industrial IT revolution with the establishment of Raidon Central Services, building on our heritage of invention and deep, on-the-ground industry expertise. Raidon Central Services is the leading industrial disruptor, building and connecting software solutions to streamline and centralize the assets, people and processes that help our customers make smarter, more accurate business decisions.",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "systems-engineer-029486",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "App Dev. Temporary Advisor",
+    "info": {
+      "skills": "Randstad Industries",
+      "project_start": "Large Project",
+      "active": "Randstad Industries has an immediate opening for a highly motivated Application Dev. Junior Advisor to join their dynamic and growing team. All qualified candidates are encouraged to apply! This position will require Design and hands-on development of robust solutions to hard problems considering scale, security, reliability, and cost.",
+      "project_end": "TBD",
+      "payment": "- $250",
+      "interests": "app-dev.-temporary-advisor-562498",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 0",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "000005",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 4",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "n/a",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 6",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "n/a",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 10",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "n/a",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 3",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "n/a",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  },
+  {
+    "project_name": "project name 2",
+    "info": {
+      "skills": "n/a",
+      "project_start": "today",
+      "active": "n/a",
+      "project_end": "TBD",
+      "payment": "n/a",
+      "interests": "n/a",
+      "workers": "Worker",
+      "customer": "n/a"
+    }
+  }
+]
