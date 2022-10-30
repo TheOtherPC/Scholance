@@ -158,7 +158,7 @@ def put_project(project):
                 'workers': project.workers,
                 'project_start': project.project_start,
                 'project_end': project.project_end,
-                'customer': project.customer.username,
+                'customer': project.customer, #.username
                 'interests': project.interests,
                 'skills': project.skills,
                 'payment': project.payment,
@@ -383,6 +383,12 @@ def get_all_projects():
     table = dynamodb.Table('Projects')
     response = table.scan(ProjectionExpression="project_name")
     return response['Items']
+
+def get_projects_table():
+    dynamodb = boto3.resource(
+        'dynamodb', endpoint_url="http://localhost:10000"
+    )
+    return dynamodb.Table('Projects')
 
 
 if __name__ == '__main__':

@@ -9,6 +9,11 @@
     <title>Scholance</title>
 </head>
 <body>
+  {% block content %} {% with messages =
+    get_flashed_messages(with_categories=true) %} {% for category, message in
+    messages %}
+    <div class="{{ category }}">{{ message }}</div>
+    {% endfor %} {% endwith %}
     <header>
         <img class="logo" src="./logo.png" alt="logo">
         <nav>
@@ -69,5 +74,6 @@
 
       </section>
     <script defer src="main.js"></script>
+    {% endblock %}
 </body>
 </html>

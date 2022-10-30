@@ -116,7 +116,7 @@ class Project:
         self.active = active
 
 
-@dispatch(str, Employee, datetime.date, datetime.date, Customer, list, list)
+@dispatch(str, str, str, str, str, str, str, str, str)
 class Project:
     def __init__(self, project_name, employee, project_start, project_end, customer, interests, skills, payment, active):
         self.project_name = project_name

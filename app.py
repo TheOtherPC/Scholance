@@ -1,11 +1,12 @@
 import json
-
+from xml.dom.pulldom import SAX2DOM
+from random import randint
 from flask import (Flask, render_template, request, redirect, session, flash)
 import random
 
 import dynamo
 import models
-import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "SECRET"
@@ -24,12 +25,16 @@ def login():
     print("Logging In")
     if request.method == "POST":
         username = request.form.get("username")
-        print(username)
         password = request.form.get("password")
+
+        if username == "" or password == "":
+            flash("Username or password field empty", "error")
+            return redirect(request.url)
         try:
             dynamo.query_users(username)[0]
         except IndexError:
-            exit
+            flash("Invalid username or password", "error")
+            return redirect(request.url)
         else:
             result = dynamo.query_users(username)[0]
             print(result)
@@ -77,6 +82,13 @@ def login():
         return "<h1>Incorrect Login</h1>"
     return render_template("login.html")
 
+@app.route("/projects_check")
+def projects_check():
+    table = dynamo.get_projects_table()
+    items = table.scan()['Items']
+    from pprint import pprint
+    pprint(items)
+    return f"Projects: {items}"
 
 @app.route('/dashboard')
 def dashboard():
@@ -90,8 +102,8 @@ def dashboard():
             if not temp:
                 pproject = "No Potential Projects"
             else:
+                pproject = []
                 for i in temp:
-                    pproject = []
                     result = len(set(temp[i]) & set(user.skills)) / float(len(set(temp[i]) | set(user.skills))) * 100
                     pproject.append(result)
                     pproject.sort()
@@ -111,19 +123,22 @@ def dashboard():
     return "<h1>Not Logged In</h1>"
 
 
-@app.route('/projects/post')
+@app.route('/projects/post', methods=["POST", "GET"])
 def projectPost():
     if request.method == "POST":
-        if customer is None:
-            exit
-        else:
-            now = datetime.now
-            interests = request.form.get("interests").split(",")
-            skills = request.form.get("skills").split(",")
-            project = models.Project(request.form.get("project_name"), request.form.get("worker"), now.date(),
-                                     request.form.get("end_date"), customer, interests, skills)
-            dynamo.put_project(project)
-        return "<h1>Need to Active Account<\h1>"
+        #if customer is None:
+        #    flash("Error: Not a verified customer", "info")
+        #else:
+        now = datetime.now()
+        #interests = request.form.get("interests").split(",")
+        #skills = request.form.get("skills").split(",")
+        
+        project = models.Project(f"project name {random.randint(0, 10)}", "Worker", "today",
+                                    "TBD",  "n/a", "n/a", "n/a", "n/a", "n/a")
+        dynamo.put_project(project)
+        flash("Project posted successfully!", "info")
+        return redirect(request.url)
+    return render_template("projects/post-project.html")
 
 @app.route('/logout')
 def logout():
@@ -162,7 +177,11 @@ def password():
 
 @app.route("/projects")
 def projects():
-    return render_template("projects/projects.html")
+    table = dynamo.get_projects_table()
+    data = table.scan()['Items']
+    from pprint import pprint
+    pprint(json.dumps(data))
+    return render_template("projects/projects.html", data=str(json.dumps(data)))
 
 @app.route("/projects/post", methods=["post", "get"])
 def postjob():
