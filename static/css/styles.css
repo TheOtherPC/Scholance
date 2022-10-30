@@ -172,6 +172,7 @@ input:focus, input:active, button:focus, button:active {
 	grid-template-columns: repeat(3, 1fr);
 }
 
+
 .project-title {
     margin-top: 10%;
     margin-bottom: 0px;

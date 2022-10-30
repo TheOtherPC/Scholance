@@ -3,7 +3,6 @@ from xml.dom.pulldom import SAX2DOM
 from random import randint
 from flask import (Flask, render_template, request, redirect, session, flash)
 import random
-import projects_update
 
 import dynamo
 import models
@@ -78,7 +77,7 @@ def login():
 
             session['user'] = user.username
 
-            return redirect('/dashboard')
+            return redirect("/dashboard")
         print("Incorrect Login")
         return "<h1>Incorrect Login</h1>"
     return render_template("login.html")
@@ -89,7 +88,6 @@ def projects_check():
     items = table.scan()['Items']
     from pprint import pprint
     pprint(items)
-    projects_update.update()
     return f"Projects: {items}"
 
 @app.route('/dashboard')
@@ -98,29 +96,29 @@ def dashboard():
         exit
     else:
         if 'user' in session and session['user'] == user.username:
-            render_template("dashboard.html")
+            render_template("dashboard/dashboard.html")
             temp = dynamo.scan_projects("skills")
             pproject = None
             if not temp:
                 pproject = "No Potential Projects"
             else:
                 pproject = []
-                for i in temp:
-                    result = len(set(temp[i]) & set(user.skills)) / float(len(set(temp[i]) | set(user.skills))) * 100
-                    pproject.append(result)
-                    pproject.sort()
+                #for i in temp:
+                #    result = len(set(temp[i]) & set(user.skills)) / float(len(set(temp[i]) | set(user.skills))) * 100
+                #    pproject.append(result)
+                #    pproject.sort()
 
             try:
                 user.projects
             except Exception as e:
                 print(e)
-                return render_template("dashboard.html", projects="Need To Activate Account", pprojects=pproject)
+                return render_template("dashboard/dashboard.html", projects="Need To Activate Account", pprojects=pproject)
             else:
                 if not user.projects:
                     print(pproject)
-                    return render_template("dashboard.html", projects="No Current Projects", pprojects=pproject)
+                    return render_template("dashboard/dashboard.html", projects="No Current Projects", pprojects=pproject)
                 else:
-                    return render_template("dashboard.html", projects=user.projects, pprojects=pproject)
+                    return render_template("dashboard/dashboard.html", projects=user.projects, pprojects=pproject)
 
     return "<h1>Not Logged In</h1>"
 
@@ -139,7 +137,6 @@ def projectPost():
                                     "TBD",  "n/a", "n/a", "n/a", "n/a", "n/a")
         dynamo.put_project(project)
         flash("Project posted successfully!", "info")
-        projects_update.update()
         return redirect(request.url)
     return render_template("projects/post-project.html")
 
