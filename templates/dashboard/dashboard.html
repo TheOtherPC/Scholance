@@ -11,26 +11,36 @@
 <body>
     <section class="bg-main">
     <header>
-        <img class="logo" src="../../static/images/logo.PNG" height="10px" alt="logo">
+        <a href="/"><img src="../../static/images/logo.PNG" height="70px" alt="logo"></a>
         <nav>
             <ul class="nav_links">
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">About</a></li>
-                <li><a class="cta" href="login"><button>Login</button></a></li>
-                <li><a class="cta" href="signup"><button>Signup</button></a></li>
+                <li><a href="dashboard">Dashboard</a></li>
+                <li><a href="projects">Projects</a></li>
+                <li><a class="cta" href="profile/user"><button>Profile</button></a></li>
+                <li><a class="cta" href="logout"><button>Logout</button></a></li>
             </ul>
         </nav> 
     </header>
 
-    <div class="row">
-        <div class="col-4">
-            <div class="col">hello</div>
-            <div class="col">hello</div>
-            <div class="col">hello</div>
-        </div>
-        <div class="col-auto">col-auto</div>
-      </div>
+    <section class="container rounded p-5">
+        <div class="row">
+            <div class="col-3">
+                <div class="col"><h1>Projects</h1></div>
+                <hr>
+                <div class="col"><h5>Your Active Projects:</h5></div>
+                  {% if projects %}
+                    {% for project in projects %}
+                    <div class="col">{{ project }}</div>
+                    {% endfor %}
+                  {% else %} 
+                  <div class="col">{{statement}}</div>
+                  {% endif %}
+            </div>
+            <div class="col-7">
+                
+            </div>
+          </div>
+    </section>
     <script defer src="main.js"></script>
 </section>
 </body>

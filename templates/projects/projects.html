@@ -11,14 +11,14 @@
 </head>
 <body>
     <header>
-        <img class="logo" src="../../static/images/logo.PNG" height="10px" alt="logo">
+        <a href="/"><img src="../../static/images/logo.PNG" height="70px" alt="logo"></a>
         <nav>
             <ul class="nav_links">
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">About</a></li>
-                <li><a class="cta" href="projects/post"><button>Post Project</button></a></li>
-                <li><a class="cta" href="/profile/user"><button>Profile</button></a></li>
+                <li><a href="dashboard">Dashboard</a></li>
+                <li><a href="projects">Projects</a></li>
+                <li><a class="cta" href="projects/post"><button>+</button></a></li>
+                <li><a class="cta" href="profile/user"><button>Profile</button></a></li>
+                <li><a class="cta" href="logout"><button>Logout</button></a></li>
             </ul>
         </nav> 
     </header>
@@ -27,10 +27,10 @@
         {% for project in data %}
             <div class="text-center gp">
                 <h4 class="project-title">{{ project.project_name }}</h4>
-                <h5> {{ project.info.skills }} </h5>
-                <h6>{{ project.info.project_start }} {{ project.info.payment }}</h6> <br>
-                <p class="text-preview" maxlength="30">{{ project.info.active }}</p> 
-                <a class="cta" href="/projects/{{project.info.interests}}"><button>Apply</button></a>
+                <h5> {{ project.info.customer }} </h5>
+                <h6>{{ project.info.size }} {{ project.info.payment }}</h6> <br>
+                <p class="text-preview" maxlength="30">{{ project.info.preview }}</p> 
+                <a class="cta" href="/projects/{{project.info.url}}"><button>Apply</button></a>
             </div>
         {% endfor %}
     </section>    

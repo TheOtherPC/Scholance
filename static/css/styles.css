@@ -6,6 +6,7 @@
     margin: 0;
     padding: 0;
     color: black;
+    caret-color: transparent;
 }
 
 header {
@@ -73,7 +74,6 @@ header {
 }
 
 .logo {
-    cursor: pointer;
     height: 200%;
 }
 
@@ -125,6 +125,14 @@ background: linear-gradient(to right, rgba(202, 172, 123, 0.5), rgba(202, 172, 1
     margin: 0;
 }
 
+input {
+    caret-color: black;
+}
+
+img {
+    caret-color: black;
+}
+
 input:focus, input:active, button:focus, button:active {
     outline: solid rgba(202, 172, 123, 1) 2px !important;
     box-shadow: none !important;
@@ -139,8 +147,16 @@ input:focus, input:active, button:focus, button:active {
     from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));   
  }
 
-.c {
+ .c {
 	max-width: 1100px;
+	margin: 0 auto;
+	overflow: auto;
+	padding: 0 40px;
+	align-items: center;
+}
+
+.c-large {
+	max-width: 1500px;
 	margin: 0 auto;
 	overflow: auto;
 	padding: 0 40px;

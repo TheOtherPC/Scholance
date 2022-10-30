@@ -158,11 +158,14 @@ def put_project(project):
                 'workers': project.workers,
                 'project_start': project.project_start,
                 'project_end': project.project_end,
-                'customer': project.customer, #.username
-                'interests': project.interests,
-                'skills': project.skills,
+                'customer': project.customer.business, #.username
+                'description': project.description,
+                'size': project.size,
+                'preview': project.preview,
                 'payment': project.payment,
-                'active': project.active
+                'active': project.active,
+                'finished': project.finished,
+                'url': project.url
             }
         }
     )
@@ -276,7 +279,7 @@ def delete_user(username, dynamodb=None):
 def delete_team(team_name, dynamodb=None):
     dynamodb = boto3.resource(
         'dynamodb', endpoint_url="http://localhost:9000")
-    table = dynamodb.table('Teams')
+    table = dynamodb.Table('Teams')
 
     response = table.delete_item(
         Key={
@@ -289,7 +292,7 @@ def delete_team(team_name, dynamodb=None):
 def delete_project(project_name):
     dynamodb = boto3.resource(
         'dynamodb', endpoint_url="http://localhost:10000")
-    table = dynamodb.table('Projects')
+    table = dynamodb.Table('Projects')
 
     response = table.delete_item(
         Key={

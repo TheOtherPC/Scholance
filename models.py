@@ -1,6 +1,7 @@
 import dynamo
 import datetime
 from multipledispatch import dispatch
+from datetime import datetime
 
 
 class Team:
@@ -102,29 +103,59 @@ class Customer(User):
         dynamo.put_project(project)
 
 
-@dispatch(str, Team, datetime.date, datetime.date, Customer, list, list)
+@dispatch(str, Team, str, str, str, str, str, Customer, str, bool, bool, str)
 class Project:
-    def __init__(self, project_name, team, project_start, project_end, customer, interests, skills, payment, active):
-        self.project_name = project_name
-        self.workers = team
-        self.project_start = project_start
-        self.project_end = project_end
-        self.customer = customer
-        self.interests = interests
-        self.skills = skills
-        self.payment = payment
-        self.active = active
+   def __init__(self, project_name, team, size, preview, description, project_start, project_end, customer, payment,
+                active,
+                finished, url):
+       self.project_name = project_name
+       self.workers = team
+       self.project_start = project_start
+       self.project_end = project_end
+       self.customer = customer
+       self.size = size
+       self.description = description
+       self.payment = payment
+       self.active = active
+       self.finished = finished
+       self.preview = preview
+       self.url = url
 
 
-@dispatch(str, str, str, str, str, str, str, str, str)
+@dispatch(str, Employee, str, str, str, str, str, Customer, str, bool, bool, bool, str)
 class Project:
-    def __init__(self, project_name, employee, project_start, project_end, customer, interests, skills, payment, active):
-        self.project_name = project_name
-        self.workers = employee
-        self.project_start = project_start
-        self.project_end = project_end
-        self.customer = customer
-        self.interests = interests
-        self.skills = skills
-        self.payment = payment
-        self.active = active
+   def __init__(self, project_name, employee, size, preview, description, project_start, project_end, customer,
+                payment, active,
+                finished, url):
+       self.project_name = project_name
+       self.workers = employee
+       self.project_start = project_start
+       self.project_end = project_end
+       self.customer = customer
+       self.size = size
+       self.description = description
+       self.payment = payment
+       self.active = active
+       self.finished = finished
+       self.preview = preview
+       self.url = url
+
+
+@dispatch(str, str, str, str, Customer, str, bool, bool, str)
+class Project:
+   def __init__(self, project_name, size, preview, description, customer, payment,
+                active,
+                finished, url):
+       self.project_name = project_name
+       self.workers = None
+       self.project_start = datetime.now().strftime("%m%d%Y")
+       self.project_end = None
+       self.customer = customer
+       self.size = size
+       self.description = description
+       self.payment = payment
+       self.active = active
+       self.finished = finished
+       self.preview = preview
+       self.url = url
+

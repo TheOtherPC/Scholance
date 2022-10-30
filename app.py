@@ -16,7 +16,12 @@ customer = None
 
 
 @app.route('/')
-def hello_world():
+def index():
+    if user is None:
+        exit
+    else:
+        if 'user' in session and session['user'] == user.username:
+            return redirect("/dashboard")
     return render_template("index.html")
 
 
@@ -76,7 +81,7 @@ def login():
                                            result['customer']['phone_number'])
 
             session['user'] = user.username
-
+            
             return redirect("/dashboard")
         print("Incorrect Login")
         return "<h1>Incorrect Login</h1>"
@@ -112,38 +117,57 @@ def dashboard():
                 user.projects
             except Exception as e:
                 print(e)
-                return render_template("dashboard/dashboard.html", projects="Need To Activate Account", pprojects=pproject)
+                return render_template("dashboard/dashboard.html", statement="Erorr")
             else:
                 if not user.projects:
                     print(pproject)
-                    return render_template("dashboard/dashboard.html", projects="No Current Projects", pprojects=pproject)
+                    return render_template("dashboard/dashboard.html", statement="No projects")
                 else:
-                    return render_template("dashboard/dashboard.html", projects=user.projects, pprojects=pproject)
+                    return render_template("dashboard/dashboard.html", projects=user.projects)
 
-    return "<h1>Not Logged In</h1>"
+    flash("You are not logged in!", "error")
+    return redirect("/login")
 
 
-@app.route('/projects/post', methods=["POST", "GET"])
-def projectPost():
-    if request.method == "POST":
-        #if customer is None:
-        #    flash("Error: Not a verified customer", "info")
-        #else:
-        now = datetime.now()
-        #interests = request.form.get("interests").split(",")
-        #skills = request.form.get("skills").split(",")
-        
-        project = models.Project(f"project name {random.randint(0, 10)}", "Worker", "today",
-                                    "TBD",  "n/a", "n/a", "n/a", "n/a", "n/a")
-        dynamo.put_project(project)
-        flash("Project posted successfully!", "info")
-        return redirect(request.url)
-    return render_template("projects/post-project.html")
+@app.route("/projects/post", methods=["POST", "GET"])
+def postjob():
+   if customer is None:
+       flash("Need to Active Account")
+       exit
+   else:
+       print(customer.username)
+       print(session['user'])
+       print('user' in session)
+       if 'user' in session and session['user'] == customer.username:
+           print("hi")
+           if request.method == "POST":
+               url = request.form.get("project_name").lower()
+               url = url.replace(" ", "-")
+               description = request.form.get("description")
+
+               if request.form.get("payment"):
+                   payment = "$" + request.form.get("payment")
+               else:
+                   payment = request.form.get("volunteer_hours") + "hours"
+
+               project = models.Project(request.form.get("project_name"), request.form.get("size"), description[0:425],
+                                        description, customer,
+                                        payment, False, False, url)
+
+               dynamo.put_project(project)
+               flash("project posted successfully!", "info")
+               return redirect(request.url)
+           else:
+               print("not a post method")
+       else:
+           flash("Not logged in!")
+           return redirect("/login")
+   return render_template("projects/post-project.html")
 
 @app.route('/logout')
 def logout():
     session.pop("user")
-    return redirect("/login")
+    return redirect("/")
 
 
 @app.route('/signup', methods=["POST", "GET"])
@@ -177,27 +201,24 @@ def password():
 
 @app.route("/projects")
 def projects():
-    # table = dynamo.get_projects_table()
-    # data = table.scan()['Items']
-    with open('projectsdata.json') as f:
-        data = json.load(f)
-    return render_template("projects/projects.html", data=data, data_length=len(data))
+   table = dynamo.get_projects_table()
+   data = table.scan()['Items']
+   return render_template("projects/projects.html", data=data, data_length=len(data))
 
-@app.route("/projects/post", methods=["post", "get"])
-def postjob():
-    if request.method == "post":
-        flash("project posted successfully!", "info")
-        return redirect(request.url)
-    return render_template("projects/post-project.html")
+@app.route("/projects/logout")
+def bs_function():
+    return redirect("/logout")
 
 @app.route("/projects/<project>")
 def project_page(project):
-    with open('projectsdata.json') as f:
-        data = json.load(f)
-    for project_data in data:
-        if project_data["info"]["interests"] == project:
-            return render_template("/projects/project-page.html", project_data=project_data)
-    return "<h1>Project Not Found!</h1>"
+   table = dynamo.get_projects_table()
+   data = table.scan()['Items']
+   for project_data in data:
+       if project_data["info"]["url"] == project:
+           return render_template("/projects/project-page.html", project_data=project_data)
+   return "<h1>Project Not Found!</h1>"
+
+
 
 
 if __name__ == '__main__':
