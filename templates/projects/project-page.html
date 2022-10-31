@@ -28,7 +28,7 @@
             <h5> {{ project_data.info.skills }} </h5>
             <h6>{{ project_data.info.size }} {{ project_data.info.payment }}</h6> <br>
             <p maxlength="30">{{ project_data.info.description }}</p> 
-            <a class="cta" href="/projects/{{project_data.info.interests}}"><button>Contact</button></a>
+            <a class="cta" href="/projects/{{project_data.info.project_url}}/apply"><button formmethod="post">Contact</button></a>
         </div>
     </section>    
 </body>

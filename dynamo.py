@@ -124,7 +124,7 @@ def put_user(user):
             'customer': {
                 'business': user['customer']['business'],
                 'projects': user['customer']['projects'],
-                'phone_number': user['customer']['phone_number']
+                'phone_number': user['customer']['phone_number'],
             }
         }
     )
@@ -165,7 +165,8 @@ def put_project(project):
                 'payment': project.payment,
                 'active': project.active,
                 'finished': project.finished,
-                'url': project.url
+                'project_url': project.project_url,
+                'applications': project.applications
             }
         }
     )
@@ -200,7 +201,7 @@ def get_team(team_name, dynamodb=None):
 
 def get_project(project_name, dynamodb=None):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
-    table = dynamodb.Table('Teams')
+    table = dynamodb.Table('Projects')
 
     try:
         response = table.get_item(
@@ -230,9 +231,9 @@ def update_user(username, attribute, attribute_value):
 
 def update_team(team_name, attribute, attribute_value):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:9000")
-    table = dynamodb.table('Teams')
+    table = dynamodb.Table('Teams')
 
-    response = table.update_tem(
+    response = table.update_item(
         Key={
             'team_name': team_name,
         },
@@ -247,9 +248,9 @@ def update_team(team_name, attribute, attribute_value):
 
 def update_project(project_name, attribute, attribute_value):
     dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:10000")
-    table = dynamodb.table('Projects')
+    table = dynamodb.Table('Projects')
 
-    response = table.update_tem(
+    response = table.update_item(
         Key={
             'project_name': project_name,
         },
@@ -357,7 +358,8 @@ def scan_projects(attribute):
         'dynamodb', endpoint_url="http://localhost:10000"
     )
     table = dynamodb.Table('Projects')
-    response = table.scan(ProjectionExpression="" + attribute + ", project_name")
+    print(attribute + ", project_name")
+    response = table.scan(ProjectionExpression= "info, project_name")
     return response['Items']
 
 
@@ -395,4 +397,4 @@ def get_projects_table():
 
 
 if __name__ == '__main__':
-    pass
+    print(get_user("something"))

@@ -89,12 +89,12 @@ class Dolphin(Admin):
 
 
 class Customer(User):
-    def __init__(self, username, email, password, first_name, last_name, business, project, phone_number):
+    def __init__(self, username, email, password, first_name, last_name, business, projects, phone_number):
         self.username = username
         self.email = email
         self.password = password
         self.business = business
-        self.project = project
+        self.projects = projects
         self.first_name = first_name
         self.last_name = last_name
         self.phone_number = phone_number
@@ -103,11 +103,11 @@ class Customer(User):
         dynamo.put_project(project)
 
 
-@dispatch(str, Team, str, str, str, str, str, Customer, str, bool, bool, str)
+@dispatch(str, Team, str, str, str, str, str, Customer, str, bool, bool, str, list)
 class Project:
    def __init__(self, project_name, team, size, preview, description, project_start, project_end, customer, payment,
                 active,
-                finished, url):
+                finished, project_url, applications):
        self.project_name = project_name
        self.workers = team
        self.project_start = project_start
@@ -119,14 +119,15 @@ class Project:
        self.active = active
        self.finished = finished
        self.preview = preview
-       self.url = url
+       self.project_url = project_url
+       self.applications = applications
 
 
-@dispatch(str, Employee, str, str, str, str, str, Customer, str, bool, bool, bool, str)
+@dispatch(str, Employee, str, str, str, str, str, Customer, str, bool, bool, bool, str, list)
 class Project:
    def __init__(self, project_name, employee, size, preview, description, project_start, project_end, customer,
                 payment, active,
-                finished, url):
+                finished, project_url, applications):
        self.project_name = project_name
        self.workers = employee
        self.project_start = project_start
@@ -138,14 +139,15 @@ class Project:
        self.active = active
        self.finished = finished
        self.preview = preview
-       self.url = url
+       self.project_url = project_url
+       self.applications = applications
 
 
 @dispatch(str, str, str, str, Customer, str, bool, bool, str)
 class Project:
    def __init__(self, project_name, size, preview, description, customer, payment,
                 active,
-                finished, url):
+                finished, project_url):
        self.project_name = project_name
        self.workers = None
        self.project_start = datetime.now().strftime("%m%d%Y")
@@ -157,5 +159,6 @@ class Project:
        self.active = active
        self.finished = finished
        self.preview = preview
-       self.url = url
+       self.project_url = project_url
+       self.applications = []
 

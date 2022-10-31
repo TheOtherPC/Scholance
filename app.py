@@ -1,7 +1,7 @@
 import json
 from xml.dom.pulldom import SAX2DOM
 from random import randint
-from flask import (Flask, render_template, request, redirect, session, flash)
+from flask import (Flask, render_template, request, redirect, session, flash, url_for)
 import random
 
 import dynamo
@@ -21,7 +21,7 @@ def index():
         exit
     else:
         if 'user' in session and session['user'] == user.username:
-            return redirect("/dashboard")
+            return redirect(url_for("dashboard"))
     return render_template("index.html")
 
 
@@ -82,7 +82,7 @@ def login():
 
             session['user'] = user.username
             
-            return redirect("/dashboard")
+            return redirect(url_for("dashboard"))
         print("Incorrect Login")
         return "<h1>Incorrect Login</h1>"
     return render_template("login.html")
@@ -101,73 +101,72 @@ def dashboard():
         exit
     else:
         if 'user' in session and session['user'] == user.username:
-            render_template("dashboard/dashboard.html")
-            temp = dynamo.scan_projects("skills")
-            pproject = None
-            if not temp:
-                pproject = "No Potential Projects"
+            try: 
+                customer.projects
+            except Exception as e:
+                print(e)
+                return render_template("dashboard/dashboard.html", statement="Activate Customer Account")
             else:
-                pproject = []
-                #for i in temp:
-                #    result = len(set(temp[i]) & set(user.skills)) / float(len(set(temp[i]) | set(user.skills))) * 100
-                #    pproject.append(result)
-                #    pproject.sort()
-
+                if not customer.projects:
+                    return render_template("dashboard/dashboard.html", statement="No Owned Projects")
+                else:
+                    return render_template("dashboard/dashbaord.html", projects=customer.projects)
             try:
                 user.projects
             except Exception as e:
                 print(e)
-                return render_template("dashboard/dashboard.html", statement="Erorr")
+                return render_template("dashboard/dashboard.html", statement="Activate Employee Account")
             else:
                 if not user.projects:
-                    print(pproject)
                     return render_template("dashboard/dashboard.html", statement="No projects")
                 else:
                     return render_template("dashboard/dashboard.html", projects=user.projects)
 
     flash("You are not logged in!", "error")
-    return redirect("/login")
+    return redirect(url_for("login"))
 
 
 @app.route("/projects/post", methods=["POST", "GET"])
 def postjob():
    if customer is None:
-       flash("Need to Active Account")
+       flash("Need to Active Account", "error")
        exit
    else:
-       print(customer.username)
-       print(session['user'])
-       print('user' in session)
        if 'user' in session and session['user'] == customer.username:
-           print("hi")
            if request.method == "POST":
-               url = request.form.get("project_name").lower()
-               url = url.replace(" ", "-")
+               project_url = request.form.get("project_name").lower()
+               project_url = project_url.replace(" ", "-")
                description = request.form.get("description")
 
                if request.form.get("payment"):
                    payment = "$" + request.form.get("payment")
                else:
-                   payment = request.form.get("volunteer_hours") + "hours"
+                   payment = request.form.get("volunteer_hours") + " hrs"
 
                project = models.Project(request.form.get("project_name"), request.form.get("size"), description[0:425],
                                         description, customer,
-                                        payment, False, False, url)
-
+                                        payment, False, False, project_url)
+               print("about to put project into dynamo")
                dynamo.put_project(project)
+               print("project into dynamo")
+               c = dynamo.get_user(customer.username)
+               c["customer"]["projects"].append(request.form.get("project_name"))
+               print(c)
+               print("<-- C")
+               dynamo.update_user(customer.username, "info", c)
                flash("project posted successfully!", "info")
                return redirect(request.url)
            else:
                print("not a post method")
        else:
            flash("Not logged in!")
-           return redirect("/login")
+           return redirect(url_for("login"))
    return render_template("projects/post-project.html")
 
 @app.route('/logout')
 def logout():
     session.pop("user")
-    return redirect("/")
+    return redirect(url_for("index"))
 
 
 @app.route('/signup', methods=["POST", "GET"])
@@ -183,7 +182,7 @@ def signup():
                                  'projects': []}, 'customer': {'business': None, 'projects': [], 'phone_number': None}}
         if not dynamo.query_users(new_user['username']):
             print(dynamo.put_user(new_user))
-            return redirect('/login')
+            return redirect(url_for("login"))
         return "<h1>Username Taken</h1>"
     return render_template("signup.html")
 
@@ -207,18 +206,37 @@ def projects():
 
 @app.route("/projects/logout")
 def bs_function():
-    return redirect("/logout")
+    return redirect(url_for("logout"))
 
 @app.route("/projects/<project>")
 def project_page(project):
    table = dynamo.get_projects_table()
    data = table.scan()['Items']
    for project_data in data:
-       if project_data["info"]["url"] == project:
+       if project_data["info"]["project_url"] == project:
            return render_template("/projects/project-page.html", project_data=project_data)
    return "<h1>Project Not Found!</h1>"
 
+@app.route("/projects/<project>/apply", methods=["POST", "GET"])
+def apply_for_project(project):
+   urls = dynamo.scan_projects("project_url")
+   p_url = urls[0]["info"]["project_url"]
+   print(p_url, project)
+   if p_url == project: 
+        pn = urls[0]["project_name"]
+        p = dynamo.get_project(pn)
+        print(p)
+        pa = p["info"]['applications']
+        pa.append(user.username)
+        dynamo.update_project(pn, "applications", pa)
+   else:
+    print("p_url != project")
+   return "<h1>Applied</h1>"
 
+    
+        
+
+   return "<h1>Project Not Found!</h1>"
 
 
 if __name__ == '__main__':
