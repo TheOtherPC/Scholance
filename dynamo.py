@@ -220,7 +220,7 @@ def update_user(username, attribute, attribute_value):
         Key={
             'username': username,
         },
-        UpdateExpression="set info." + attribute + "=:c",
+        UpdateExpression="set " + attribute + "=:c",
         ExpressionAttributeValues={
             ":c": attribute_value
         },
@@ -237,7 +237,7 @@ def update_team(team_name, attribute, attribute_value):
         Key={
             'team_name': team_name,
         },
-        UpdateExpression="set info." + attribute + "=:c",
+        UpdateExpression="set " + attribute + "=:c",
         ExpressionAttributeValues={
             ":c": attribute_value
         },
@@ -254,7 +254,7 @@ def update_project(project_name, attribute, attribute_value):
         Key={
             'project_name': project_name,
         },
-        UpdateExpression="set info." + attribute + "=:c",
+        UpdateExpression="set " + attribute + "=:c",
         ExpressionAttributeValues={
             ":c": attribute_value
         },
@@ -394,7 +394,8 @@ def get_projects_table():
         'dynamodb', endpoint_url="http://localhost:10000"
     )
     return dynamodb.Table('Projects')
+    dynamo.update_user("something", "customer.projects", '["hi"]')
 
 
 if __name__ == '__main__':
-    print(get_user("something"))
+    pprint(get_user("something"))

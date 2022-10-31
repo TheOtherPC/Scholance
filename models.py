@@ -160,5 +160,5 @@ class Project:
        self.finished = finished
        self.preview = preview
        self.project_url = project_url
-       self.applications = []
+       self.applications = ["hello"]
 

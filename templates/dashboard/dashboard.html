@@ -28,13 +28,22 @@
                 <div class="col"><h1>Projects</h1></div>
                 <hr>
                 <div class="col"><h5>Your Active Projects:</h5></div>
+                {% if cprojects %} 
+                  {% for cproject in cprojects %}
+                  <div class="col">{{ cproject }}</div>
+                  {% endfor %}
+                  {% endif %}
+                  <br>
+                <div class="col"><h5>Joined Projects:</h5></div>
                   {% if projects %}
                     {% for project in projects %}
                     <div class="col">{{ project }}</div>
                     {% endfor %}
-                  {% else %} 
+                    {% else %}
+                    <div class="col">No Accepted Project Jobs</div>
+                    {% endif %}
+
                   <div class="col">{{statement}}</div>
-                  {% endif %}
             </div>
             <div class="col-7">
                 
