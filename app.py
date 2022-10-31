@@ -107,9 +107,9 @@ def dashboard():
             statement = ""
             customer_projects = False
             user_projects = False
-            try:
+            try: # (i created an account to test btw, i didn't use "something" or wtv)
                 customer.projects
-            except Exception as e:
+            except Exception as e: # 'NoneType' object has no attribute 'projects'
                 print(e)
                 statement += "Activate Customer Account "
             else:
@@ -119,7 +119,7 @@ def dashboard():
                     customer_projects = True
             try:
                 user.projects
-            except Exception as e:
+            except Exception as e: # 'User' object has no attribute 'projects'
                 print(e)
                 statement += "Activate Employee Account "
             else:
@@ -127,31 +127,47 @@ def dashboard():
                     statement += "No projects"
                 else:
                     user_projects = True
-            print("PRINTING CUSTOMER INFORMATION")
-            print(customer)
-            print(customer.username)
-            print(customer.email)
-            print(customer.password)
-            print(customer.business)
-            print(customer.projects)
-            print(customer.first_name)
-            print(customer.last_name)
-            print(customer.phone_number)
-            print("FINISHED PRINTING CUSTOMER INFORMATION")
-
-            print(str(customer.projects) + "projects customer.info.projects")
 
             if customer_projects and user_projects:
-                return render_template("dashboard/dashboard.html", projects=user.projects, cprojects=customer.projects)
+                projects_urls = [x.lower().replace(" ", "-") for x in user.projects]
+                projects_dict = dict(zip(user.projects, projects_urls))
+                cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
+                cprojects_dict = dict(zip(customer.projects, cprojects_urls))
+                return render_template("dashboard/dashboard.html", projects=projects_dict, cprojects=cprojects_dict)
             elif customer_projects:
-                return render_template("dashboard/dashboard.html", cprojects=customer.projects)
+                cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
+                cprojects_dict = dict(zip(customer.projects, cprojects_urls))
+                return render_template("dashboard/dashboard.html", cprojects=cprojects_dict)
             elif user_projects:
-                return render_template("dashboard/dashboard.html", projects=user.projects)
+                projects_urls = [x.lower().replace(" ", "-") for x in user.projects]
+                projects_dict = dict(zip(user.projects, projects_urls))
+                return render_template("dashboard/dashboard.html", projects=projects_dict)
             else:
                 return render_template("dashboard/dashboard.html", statement=statement)
 
     flash("You are not logged in!", "error")
     return redirect(url_for("login"))
+
+
+@app.route("/dashboard/<project>")
+def dashboard_project_page(project):
+    table = dynamo.get_projects_table()
+    data = table.scan()['Items']
+    for project_data in data:
+        if project_data["info"]["project_url"] == project:
+            return render_template("/dashboard/dashboard-project.html", project_data=project_data)
+
+@app.route("/dashboard/<project>/<username>/accept")
+def accept_project_user(project, username):
+    table = dynamo.get_projects_table()
+    data = table.scan()['Items']
+    for project_data in data:
+        if project_data["info"]["project_url"] == project:
+            dynamo.update_user(username, "employee.projects", project_data["project_name"])
+            flash("New employee recruited!", "info")
+            return redirect("/dashboard")
+    flash("Error in adding employee", "error")
+    return redirect("/dashboard")
 
 
 @app.route("/projects/post", methods=["POST", "GET"])
@@ -265,12 +281,11 @@ def apply_for_project(project):
             print(p)
             pa = p["info"]['applications']
             pa.append(user.username)
-            dynamo.update_project(pn, "applications", pa)
+            dynamo.update_project(pn, "applications", pa) # should be under info and then applications but don't change for now
         else:
             print("p_url != project")
     return "<h1>Applied</h1>"
 
-    return "<h1>Project Not Found!</h1>"
 
 
 if __name__ == '__main__':

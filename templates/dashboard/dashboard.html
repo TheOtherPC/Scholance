@@ -29,15 +29,15 @@
                 <hr>
                 <div class="col"><h5>Your Active Projects:</h5></div>
                 {% if cprojects %} 
-                  {% for cproject in cprojects %}
-                  <div class="col">{{ cproject }}</div>
+                  {% for cproject, url in cprojects.items() %}
+                  <a href="/dashboard/{{ url }}">{{ cproject }}</a>
                   {% endfor %}
                   {% endif %}
                   <br>
                 <div class="col"><h5>Joined Projects:</h5></div>
                   {% if projects %}
-                    {% for project in projects %}
-                    <div class="col">{{ project }}</div>
+                    {% for project, url in projects.items() %}
+                    <a href="/dashboard/{{ url }}">{{ project }}</a>
                     {% endfor %}
                     {% else %}
                     <div class="col">No Accepted Project Jobs</div>

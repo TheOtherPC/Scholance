@@ -394,8 +394,8 @@ def get_projects_table():
         'dynamodb', endpoint_url="http://localhost:10000"
     )
     return dynamodb.Table('Projects')
-    dynamo.update_user("something", "customer.projects", '["hi"]')
 
 
 if __name__ == '__main__':
-    pprint(get_user("something"))
+    #update_user("Bross", "employee.projects", ["test_not_real"])
+    pprint(get_user("Bross"))
