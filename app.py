@@ -232,14 +232,37 @@ def signup():
     return render_template("signup.html")
 
 
-@app.route('/profile/user')
+@app.route('/profile/user', methods=["POST", "GET"])
 def user_profile():
-    return render_template("profile/user-profile.html")
-
+    school = ""
+    if method == "POST":
+        dynamo.update_user(user.username, "info.email", request.form.get("email"))
+        dynamo.update_user(user.username, "employee.school", request.form.get("school"))
+        flash("Updated user profile!", "info")
+        return redirect(request.url)
+    try:
+        user.school
+    except Exception as e:
+        print(e)
+    else: 
+        school = user.school
+    return render_template("profile/user-profile.html", username = user.username, email= user.email, school=user.school)
 
 @app.route('/profile/business')
 def business_profile():
-    return render_template("profile/business-profile.html")
+    business = ""
+    phone = ""
+    if method == "POST":
+        dynamo.update_user(user.username, "customer.business", request.form.get("business"))
+        dynamo.update_user(user.username, "customer.phone", request.form.get("phone"))
+        flash("Updated business profile!", "info")
+        return redirect(request.url)
+    if customer is None:
+        exit
+    else:
+        business = customer.business
+        phone = customer.phone
+    return render_template("profile/user-profile.html", business = business, phone = phone)
 
 
 @app.route('/profile/password')
