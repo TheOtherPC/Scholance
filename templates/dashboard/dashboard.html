@@ -36,9 +36,7 @@
                   <br>
                 <div class="col"><h5>Joined Projects:</h5></div>
                   {% if projects %}
-                    {% for project, url in projects.items() %}
-                    <a href="/dashboard/{{ url }}">{{ project }}</a>
-                    {% endfor %}
+                    <a href="/dashboard/{{ projects }}">{{ projects }}</a>
                     {% else %}
                     <div class="col">No Accepted Project Jobs</div>
                     {% endif %}

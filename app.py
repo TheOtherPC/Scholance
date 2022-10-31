@@ -110,6 +110,7 @@ def dashboard():
             try: # (i created an account to test btw, i didn't use "something" or wtv)
                 customer.projects
             except Exception as e: # 'NoneType' object has no attribute 'projects'
+                print("EXCEPTION")
                 print(e)
                 statement += "Activate Customer Account "
             else:
@@ -120,6 +121,7 @@ def dashboard():
             try:
                 user.projects
             except Exception as e: # 'User' object has no attribute 'projects'
+                print("EXCEPTION")
                 print(e)
                 statement += "Activate Employee Account "
             else:
@@ -131,17 +133,20 @@ def dashboard():
             if customer_projects and user_projects:
                 projects_urls = [x.lower().replace(" ", "-") for x in user.projects]
                 projects_dict = dict(zip(user.projects, projects_urls))
+                print(str(user.projects) + "user projects")
                 cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
                 cprojects_dict = dict(zip(customer.projects, cprojects_urls))
                 return render_template("dashboard/dashboard.html", projects=projects_dict, cprojects=cprojects_dict)
             elif customer_projects:
+                print(str(user.projects) + "user projects")
                 cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
                 cprojects_dict = dict(zip(customer.projects, cprojects_urls))
                 return render_template("dashboard/dashboard.html", cprojects=cprojects_dict)
             elif user_projects:
                 projects_urls = [x.lower().replace(" ", "-") for x in user.projects]
                 projects_dict = dict(zip(user.projects, projects_urls))
-                return render_template("dashboard/dashboard.html", projects=projects_dict)
+                print(str(user.projects) + "user projects")
+                return render_template("dashboard/dashboard.html", projects=user.projects)
             else:
                 return render_template("dashboard/dashboard.html", statement=statement)
 
