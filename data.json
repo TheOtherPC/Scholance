@@ -1,9 +1,9 @@
 [
   {
-    "username": "hi",
+    "username": "Employee",
     "info": {
       "email": "hello@gmail.com",
-      "password": "bye",
+      "password": "123",
       "first_name": "John",
       "last_name": "Doe"
     },
@@ -22,10 +22,10 @@
     }
   },
   {
-    "username": "something",
+    "username": "Customer",
     "info": {
       "email": "something@gmail.com",
-      "password": "nothing",
+      "password": "123",
       "first_name": "Bob",
       "last_name": "Ross"
    },

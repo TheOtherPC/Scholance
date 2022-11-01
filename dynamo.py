@@ -397,5 +397,13 @@ def get_projects_table():
 
 
 if __name__ == '__main__':
-    #update_user("Bross", "employee.projects", ["test_not_real"])
-    pprint(get_user("Bross"))
+    #delete user and projects table then uncomment following lines of code and run dynamo.py
+    '''
+    user_table = create_user_table()
+    print("Status: ", user_table.table_status)
+
+    with open("data.json") as json_file:
+        user_list = json.load(json_file, parse_float=Decimal)
+    load_user_data(user_list)
+    '''
+

@@ -107,9 +107,9 @@ def dashboard():
             statement = ""
             customer_projects = False
             user_projects = False
-            try: # (i created an account to test btw, i didn't use "something" or wtv)
+            try:  # (i created an account to test btw, i didn't use "something" or wtv)
                 customer.projects
-            except Exception as e: # 'NoneType' object has no attribute 'projects'
+            except Exception as e:  # 'NoneType' object has no attribute 'projects'
                 print("EXCEPTION")
                 print(e)
                 statement += "Activate Customer Account "
@@ -120,7 +120,7 @@ def dashboard():
                     customer_projects = True
             try:
                 user.projects
-            except Exception as e: # 'User' object has no attribute 'projects'
+            except Exception as e:  # 'User' object has no attribute 'projects'
                 print("EXCEPTION")
                 print(e)
                 statement += "Activate Employee Account "
@@ -136,7 +136,7 @@ def dashboard():
                 print(str(user.projects) + "user projects")
                 cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
                 cprojects_dict = dict(zip(customer.projects, cprojects_urls))
-                return render_template("dashboard/dashboard.html", projects=projects_dict, cprojects=cprojects_dict)
+                return render_template("dashboard/dashboard.html", projects=user.projects, cprojects=cprojects_dict)
             elif customer_projects:
                 print(str(user.projects) + "user projects")
                 cprojects_urls = [x.lower().replace(" ", "-") for x in customer.projects]
@@ -161,6 +161,7 @@ def dashboard_project_page(project):
     for project_data in data:
         if project_data["info"]["project_url"] == project:
             return render_template("/dashboard/dashboard-project.html", project_data=project_data)
+
 
 @app.route("/dashboard/<project>/<username>/accept")
 def accept_project_user(project, username):
@@ -240,7 +241,7 @@ def signup():
 @app.route('/profile/user', methods=["POST", "GET"])
 def user_profile():
     school = ""
-    if method == "POST":
+    if request.method == "POST":
         dynamo.update_user(user.username, "info.email", request.form.get("email"))
         dynamo.update_user(user.username, "employee.school", request.form.get("school"))
         flash("Updated user profile!", "info")
@@ -249,15 +250,16 @@ def user_profile():
         user.school
     except Exception as e:
         print(e)
-    else: 
+    else:
         school = user.school
-    return render_template("profile/user-profile.html", username = user.username, email= user.email, school=user.school)
+    return render_template("profile/user-profile.html", username=user.username, email=user.email, school=user.school)
+
 
 @app.route('/profile/business')
 def business_profile():
     business = ""
-    phone = ""
-    if method == "POST":
+    phone= ""
+    if request.method == "POST":
         dynamo.update_user(user.username, "customer.business", request.form.get("business"))
         dynamo.update_user(user.username, "customer.phone", request.form.get("phone"))
         flash("Updated business profile!", "info")
@@ -266,8 +268,8 @@ def business_profile():
         exit
     else:
         business = customer.business
-        phone = customer.phone
-    return render_template("profile/user-profile.html", business = business, phone = phone)
+        phone = customer.phone_number
+    return render_template("profile/business-profile.html", business=business, phone=phone)
 
 
 @app.route('/profile/password')
@@ -291,6 +293,7 @@ def bs_function():
 def project_page(project):
     table = dynamo.get_projects_table()
     data = table.scan()['Items']
+    print(data)
     for project_data in data:
         if project_data["info"]["project_url"] == project:
             return render_template("/projects/project-page.html", project_data=project_data)
@@ -309,11 +312,11 @@ def apply_for_project(project):
             print(p)
             pa = p["info"]['applications']
             pa.append(user.username)
-            dynamo.update_project(pn, "applications", pa) # should be under info and then applications but don't change for now
+            dynamo.update_project(pn, "applications",
+                                  pa)  # should be under info and then applications but don't change for now
         else:
             print("p_url != project")
     return "<h1>Applied</h1>"
-
 
 
 if __name__ == '__main__':
