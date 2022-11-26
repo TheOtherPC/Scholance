@@ -32,16 +32,23 @@
                   {% for cproject, url in cprojects.items() %}
                   <a href="/dashboard/{{ url }}">{{ cproject }}</a>
                   {% endfor %}
+                  {% else %}
+                  <div class="col">None</div>
                   {% endif %}
                   <br>
                 <div class="col"><h5>Joined Projects:</h5></div>
                   {% if projects %}
                     <a href="/dashboard/{{ projects }}">{{ projects }}</a>
                     {% else %}
-                    <div class="col">No Accepted Project Jobs</div>
+                    <div class="col">None</div>
                     {% endif %}
-
-                  <div class="col">{{statement}}</div>
+                    {% if statement %}
+                    <br>
+                    <div class="col"><h5>Alerts</h5></div>
+                    {% for s in statement%}
+                  <div class="col">{{s}}</div>
+                  {% endfor %}
+                  {% endif %}
             </div>
             <div class="col-7">
                 

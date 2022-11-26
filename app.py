@@ -84,8 +84,8 @@ def login():
             session['user'] = user.username
 
             return redirect(url_for("dashboard"))
-        print("Incorrect Login")
-        return "<h1>Incorrect Login</h1>"
+        flash("Incorrect Login!", "error")
+        return redirect(request.url)
     return render_template("login.html")
 
 
@@ -104,7 +104,7 @@ def dashboard():
         exit
     else:
         if 'user' in session and session['user'] == user.username:
-            statement = ""
+            statement = []
             customer_projects = False
             user_projects = False
             try:  # (i created an account to test btw, i didn't use "something" or wtv)
@@ -112,10 +112,10 @@ def dashboard():
             except Exception as e:  # 'NoneType' object has no attribute 'projects'
                 print("EXCEPTION")
                 print(e)
-                statement += "Activate Customer Account "
+                statement.append("Activate Customer Account!")
             else:
                 if not customer.projects:
-                    statement += "No Owned Projects "
+                    statement.append("No Owned Projects!")
                 else:
                     customer_projects = True
             try:
@@ -123,10 +123,10 @@ def dashboard():
             except Exception as e:  # 'User' object has no attribute 'projects'
                 print("EXCEPTION")
                 print(e)
-                statement += "Activate Employee Account "
+                statement.append("Activate Employee Account!")
             else:
                 if not user.projects:
-                    statement += "No projects"
+                    statement.append("No projects!")
                 else:
                     user_projects = True
 
@@ -204,7 +204,7 @@ def postjob():
                 dynamo.update_user(customer.username, "customer.projects", cust)
                 print(cust)
                 print("<-- Cust")
-                flash("project posted successfully!", "info")
+                flash("Project posted successfully!", "info")
                 return redirect(request.url)
             else:
                 print("not a post method")
@@ -233,6 +233,7 @@ def signup():
                                  'projects': []}, 'customer': {'business': None, 'projects': [], 'phone_number': None}}
         if not dynamo.query_users(new_user['username']):
             print(dynamo.put_user(new_user))
+            flash("Account created!", "info")
             return redirect(url_for("login"))
         return "<h1>Username Taken</h1>"
     return render_template("signup.html")
